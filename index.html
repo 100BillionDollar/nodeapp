@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<script src="http://localhost:3001/socket.io/socket.io.js"></script>
+
+</head>
+<style>
+    .absolute-container{width: 100%;position: fixed;bottom: 0px;background-color: cyan;padding: 20px;text-align: center;}
+    .absolute-container input{width: 80%;padding: 18px;}
+       .absolute-container  button{padding: 10px;border:none;height: 100%;}
+</style>
+<body>
+<div class="container">
+        <ul id="messages"></ul>
+
+    <div class="absolute-container">
+        <form  action="">
+            <input id="input" autocomplete="off" /><button type="button" id="form">Send</button>
+        </form>
+    </div>
+</div>
+<script>
+      var messages = document.getElementById('messages');
+
+
+        var socket = io.connect('http://localhost:3001',{
+
+
+JSONP:true,
+
+        });
+
+       
+    var form = document.getElementById('form');
+    var input = document.getElementById('input');
+
+  let name=prompt("Enter your name to join")
+    socket.emit("new-user-joined", name);
+    form.addEventListener('click', function (e) {
+        if (input.value) {
+              socket.emit("send", input.value);
+
+            input.value = '';
+        }
+                    });
+
+         
+         socket.on('user-joined',name=>{
+  console.log('join chat: ' + name);
+});
+  socket.on('receive', data => {
+    console.log (data)  ;
+  });
+</script>
+</body>
+</html>
